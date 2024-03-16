@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="p-3">
+    <div class="card">
+        <div class="card-header">
+           Liste Patients
+        </div>
+        <div class="card-body">
+            <table class ="table">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom</th>
+                    <th>Date</th>
+                    <th>Malade</th>
+                    <th>Score</th>
+                </tr>
+                <tr th:each="patient : ${listPatients}">
+                    <td th:text="${patient.id}"></td>
+                    <td th:text="${patient.nom}"></td>
+                    <td th:text="${patient.dateNaissance}"></td>
+                    <td th:text="${patient.malade}"></td>
+                    <td th:text="${patient.score}"></td>
+                </tr>
+                </thead>
+
+            </table>
+        </div>
+            <ul class="nav nav-pills">
+                <li th:each="page,status:${pages}">
+                <a  th:href="@{/index(page=${status.index})}"
+                    th:class="${currentPage ==  status.index ? 'btn btn-info ms-2' : 'btn btn-outline-info ms-2'}"
+                    th:text="${status.index}">
+                </a>
+                </li>
+            </ul>
+    </div>
+</div>
+
+</body>
+</html>
