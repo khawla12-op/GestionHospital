@@ -1,47 +1,73 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="template1">
+
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css">
 </head>
 <body>
-<div class="p-3">
-    <div class="card">
-        <div class="card-header">
-           Liste Patients
-        </div>
-        <div class="card-body">
-            <table class ="table">
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Nom</th>
-                    <th>Date</th>
-                    <th>Malade</th>
-                    <th>Score</th>
-                </tr>
-                <tr th:each="patient : ${listPatients}">
-                    <td th:text="${patient.id}"></td>
-                    <td th:text="${patient.nom}"></td>
-                    <td th:text="${patient.dateNaissance}"></td>
-                    <td th:text="${patient.malade}"></td>
-                    <td th:text="${patient.score}"></td>
-                </tr>
-                </thead>
+<div layout:fragment="content1">
+    <div class="p-3">
+        <div class="card">
+            <div class="card-header">
+                Liste Patients
+            </div>
+            <div class="card-body">
+                <form method="get" th:action="@{index}">
+                    <label>Keyword:</label>
+                    <input type="text" name="keyword" th:value="${keyword}" >
+                    <button type="submit" class="btn btn-info">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </form>
+                <table class ="table">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nom</th>
+                        <th>Date</th>
+                        <th>Malade</th>
+                        <th>Score</th>
+                    </tr>
+                    <tr th:each="patient : ${listPatients}">
+                        <td th:text="${patient.id}"></td>
+                        <td th:text="${patient.nom}"></td>
+                        <td th:text="${patient.dateNaissance}"></td>
+                        <td th:text="${patient.malade}"></td>
+                        <td th:text="${patient.score}"></td>
+                        <td>
+                            <a onclick ="return confirm('Etes vous sure ?')"
+                               th:href="@{delete(id=${patient.id},keyword=${keyword},page=${currentPage})}" class="btn btn-danger">
+                                <i class ="bi bi-trash"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a th:href="@{editPatients(id=${patient.id},keyword=${keyword},page=${currentPage})}" class="btn btn-success">
+                              Edit
+                            </a>
+                        </td>
+                    </tr>
+                    </thead>
 
-            </table>
-        </div>
+                </table>
+            </div>
             <ul class="nav nav-pills">
                 <li th:each="page,status:${pages}">
-                <a  th:href="@{/index(page=${status.index})}"
-                    th:class="${currentPage ==  status.index ? 'btn btn-info ms-2' : 'btn btn-outline-info ms-2'}"
-                    th:text="${status.index}">
-                </a>
+                    <a  th:href="@{/index(page=${status.index},keyword=${keyword})}"
+                        th:class="${currentPage ==  status.index ? 'btn btn-info ms-2' : 'btn btn-outline-info ms-2'}"
+                        th:text="${status.index}">
+                    </a>
                 </li>
             </ul>
+        </div>
     </div>
 </div>
+
 
 </body>
 </html>
